@@ -1,19 +1,29 @@
 package colonialobfuscator.transforms;
 
 import java.io.IOException;
+import java.lang.reflect.Modifier;
+import java.util.List;
 import java.util.Random;
 
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.InsnList;
+import org.objectweb.asm.tree.JumpInsnNode;
 import org.objectweb.asm.tree.LdcInsnNode;
 import org.objectweb.asm.tree.LocalVariableNode;
+import org.objectweb.asm.tree.LookupSwitchInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.TableSwitchInsnNode;
+import org.objectweb.asm.tree.VarInsnNode;
 
 import colonialobfuscator.utils.NameGen;
 import colonialobfuscator.utils.NodeUtils;
+import colonialobfuscator.utils.VariableProvider;
 
 public class StringEncryption implements ClassModifier {
+	//boolean Flow = false;
     @Override
     public void modify(ClassNode node) {
 		MethodNode method = null;
@@ -46,6 +56,9 @@ public class StringEncryption implements ClassModifier {
 		}
 		for(LocalVariableNode var : method2.localVariables) {
 			var.name = "ColonialObfuscator_" + NameGen.String(10);
+		}
+		if(new Random().nextBoolean()/*Flow*/) {
+			mangleSwitches(method2);
 		}
 	    node.methods.add(method2);
 	for (MethodNode mn : node.methods) {
@@ -172,5 +185,57 @@ if (charArray.length < 2) {
 charArray[0] = (char) (charArray[0] ^ 16);
 }
 return charArray;
+}
+static void mangleSwitches(MethodNode node) {
+    if (Modifier.isAbstract(node.access) || Modifier.isNative(node.access))
+        return;
+
+    VariableProvider provider = new VariableProvider(node);
+    int resultSlot = provider.allocateVar();
+
+    for (AbstractInsnNode abstractInsnNode : node.instructions.toArray()) {
+        if (abstractInsnNode instanceof TableSwitchInsnNode) {
+            TableSwitchInsnNode switchInsnNode = (TableSwitchInsnNode) abstractInsnNode;
+
+            InsnList insnList = new InsnList();
+            insnList.add(new VarInsnNode(Opcodes.ISTORE, resultSlot));
+
+            int j = 0;
+
+            for (int i = switchInsnNode.min; i <= switchInsnNode.max; i++) {
+                insnList.add(new VarInsnNode(Opcodes.ILOAD, resultSlot));
+                insnList.add(NodeUtils.generateIntPush(i));
+                insnList.add(new JumpInsnNode(Opcodes.IF_ICMPEQ, switchInsnNode.labels.get(j)));
+
+                j++;
+            }
+            insnList.add(new JumpInsnNode(Opcodes.GOTO, switchInsnNode.dflt));
+
+
+            node.instructions.insert(abstractInsnNode, insnList);
+            node.instructions.remove(abstractInsnNode);
+        }
+        if (abstractInsnNode instanceof LookupSwitchInsnNode) {
+            LookupSwitchInsnNode switchInsnNode = (LookupSwitchInsnNode) abstractInsnNode;
+
+            InsnList insnList = new InsnList();
+            insnList.add(new VarInsnNode(Opcodes.ISTORE, resultSlot));
+
+            List<Integer> keys = switchInsnNode.keys;
+            for (int i = 0; i < keys.size(); i++) {
+                Integer key = keys.get(i);
+                insnList.add(new VarInsnNode(Opcodes.ILOAD, resultSlot));
+                insnList.add(NodeUtils.generateIntPush(key));
+                insnList.add(new JumpInsnNode(Opcodes.IF_ICMPEQ, switchInsnNode.labels.get(i)));
+
+            }
+
+            insnList.add(new JumpInsnNode(Opcodes.GOTO, switchInsnNode.dflt));
+
+
+            node.instructions.insert(abstractInsnNode, insnList);
+            node.instructions.remove(abstractInsnNode);
+        }
+    }
 }
     }

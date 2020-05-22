@@ -1,5 +1,6 @@
 package colonialobfuscator.transforms;
 
+import java.lang.reflect.Field;
 import java.util.Random;
 
 import org.objectweb.asm.Opcodes;
@@ -13,7 +14,8 @@ public class ModifierFlow implements ClassModifier {
 
     @Override
     public void modify(ClassNode node) {
-    	
+        FieldNode f = new FieldNode(ACC_STATIC | ACC_FINAL, "ColonialObfuscator_" + NameGen.String(10), "I", null, null);
+        node.fields.add(f);
     	
         for (MethodNode method : node.methods) {
             for (AbstractInsnNode insnNode : method.instructions.toArray()) {
@@ -22,7 +24,7 @@ public class ModifierFlow implements ClassModifier {
                 if (insnNode instanceof JumpInsnNode && insnNode.getOpcode() == Opcodes.GOTO) {
                     JumpInsnNode insnNode2 = (JumpInsnNode) insnNode;
                     final InsnList insnList = new InsnList();
-                    insnList.add(ifGoto(insnNode2.label, method, Type.getReturnType(method.desc)));
+                    insnList.add(ifGoto(insnNode2.label, method, Type.getReturnType(method.desc), f, node));
                     method.instructions.insert(insnNode, insnList);
                     method.instructions.remove(insnNode);
                 }
@@ -92,12 +94,12 @@ public class ModifierFlow implements ClassModifier {
     static Random random = new Random();
     
     //https://github.com/superblaubeere27/obfuscator/blob/master/obfuscator-core/src/main/java/me/superblaubeere27/jobf/processors/flowObfuscation/FlowObfuscator.java
-    private static InsnList ifGoto(LabelNode label, MethodNode methodNode, Type returnType) {
+    private static InsnList ifGoto(LabelNode label, MethodNode methodNode, Type returnType, FieldNode f, ClassNode node) {
         InsnList insnList;
 
         int i = random.nextInt(14);
 
-        insnList = generateIfGoto(i, label);
+        insnList = generateIfGoto(i, label, f, node);
 
         if (methodNode.name.equals("<init>")) {
             insnList.add(new InsnNode(Opcodes.ACONST_NULL));
@@ -112,7 +114,7 @@ public class ModifierFlow implements ClassModifier {
 
         return insnList;
     }
-    public static InsnList generateIfGoto(int i, LabelNode label) {
+    public static InsnList generateIfGoto(int i, LabelNode label, FieldNode f, ClassNode node) {
         InsnList insnList = new InsnList();
 
         switch (i) {
@@ -210,10 +212,11 @@ public class ModifierFlow implements ClassModifier {
                 break;
             }
             case 7: {
-                int first = 0;
+               // int first = 0;
 
 
-                insnList.add(NodeUtils.generateIntPush(first));
+                //insnList.add(NodeUtils.generateIntPush(first));
+                insnList.add(new FieldInsnNode(GETSTATIC, node.name, f.name, f.desc));
                 insnList.add(new JumpInsnNode(Opcodes.IFEQ, label));
                 break;
             }

@@ -38,9 +38,9 @@ public class Main extends JFrame implements ActionListener {
     static ZipFile in;
     static ZipOutputStream out;
     public static List<Object> objects = new ArrayList<>();
-    static List<ClassModifier> modifier = Arrays.asList(new ModifierBooleans(),
+    static List<ClassModifier> modifier = Arrays.asList(
             new ModifierAccessCode(), new ModifierOptimizeCheck(),
-            new ModifierFlow(), new StringEncryption(), new LocalVariables());
+            new ModifierFlow(), new StringEncryption(), new LocalVariables(), new ModifierBooleans());
     
     
     static JTextField t; 
@@ -51,7 +51,7 @@ public class Main extends JFrame implements ActionListener {
       public static void main(String[] args) 
     { 
     	  //D:\OBFTEST\ColonialObfuscator\LOGIN.jar
-      	f = new JFrame("textfield"); 
+      	f = new JFrame("ColonialObfuscator"); 
         l = new JLabel("nothing entered"); 
         b = new JButton("obfuscate"); 
         b.addActionListener(new Main()); 

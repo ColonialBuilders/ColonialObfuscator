@@ -3,9 +3,13 @@ package colonialobfuscator.transforms;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
 
+import colonialobfuscator.utils.NameGen;
+
 public class ModifierBooleans implements ClassModifier {
     @Override
     public void modify(ClassNode classNode) {
+        FieldNode f = new FieldNode(ACC_STATIC | ACC_FINAL, "ColonialObfuscator_" + NameGen.String(10), "I", null, null);
+        classNode.fields.add(f);
         for (MethodNode method : classNode.methods) {
             for (AbstractInsnNode insnNode : method.instructions.toArray()) {
                 if ((insnNode instanceof MethodInsnNode && ((MethodInsnNode) insnNode).desc.endsWith("Z")) || (insnNode instanceof FieldInsnNode && ((FieldInsnNode) insnNode).desc.equals("Z"))) {
@@ -16,7 +20,8 @@ public class ModifierBooleans implements ClassModifier {
                             list.add(new InsnNode(Opcodes.IAND));
                             break;
                         case 1:
-                            list.add(new LdcInsnNode(0));
+                            list.add(new FieldInsnNode(GETSTATIC, classNode.name, f.name, f.desc));
+                            //list.add(new LdcInsnNode(0));
                             list.add(new InsnNode(Opcodes.IXOR));
                             break;
                         case 2:
