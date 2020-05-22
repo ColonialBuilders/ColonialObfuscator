@@ -84,7 +84,13 @@ public class StringEncryption implements ClassModifier {
 		}
 	}
     }
+
+    	
     }
+    
+    
+    
+    
     
     private static String EnWithKey(char[] cArr, int key) {
     	char c;
@@ -96,34 +102,34 @@ public class StringEncryption implements ClassModifier {
     	            c = (char) ((char) ((i ^ key) % 10) ^ key);
     	            break;
     	        case 1:
-    	            c = (char) ((char) ((i ^ key) % 10) ^ key);
+    	            c = (char) ((char) ((i ^ (key % i)) % 10) ^ key);
     	            break;
     	        case 2:
-    	            c = (char) ((char) ((i ^ key) % 10) ^ key);
+    	            c = (char) ((char) ((i ^ (key % i)) % 10) ^ key);
     	            break;
     	        case 3:
-    	            c = (char) ((char) ((i ^ key) % 10) ^ key);
+    	            c = (char) ((char) ((i ^ (key % i)) % 10) ^ key);
     	            break;
     	        case 4:
-    	            c = (char) ((char) ((i ^ key) % 10) ^ key);
+    	            c = (char) ((char) ((i ^ (key % i)) % 10) ^ key);
     	            break;
     	        case 5:
-    	            c = (char) ((char) ((i ^ key) % 10) ^ key);
+    	            c = (char) ((char) ((i ^ (key % i)) % 10) ^ key);
     	            break;
     	        case 6:
-    	            c = (char) ((char) ((i ^ key) % 10) ^ key);
+    	            c = (char) ((char) ((i ^ (key % i)) % 10) ^ key);
     	            break;
     	        case 7:
-    	            c = (char) ((char) ((i ^ key) % 10) ^ key);
+    	            c = (char) ((char) ((i ^ (key % i)) % 10) ^ key);
     	            break;
     	        case 8:
-    	            c = (char) ((char) ((i ^ key) % 10) ^ key);
+    	            c = (char) ((char) ((i ^ (key % i)) % 10) ^ key);
     	            break;
     	        case 9:
-    	            c = (char) ((char) ((i ^ key) % 10) ^ key);
+    	            c = (char) ((char) ((i ^ (key % i)) % 10) ^ key);
     	            break;
     	        case 10:
-    	            c = (char) ((char) ((i ^ key) % 10) ^ key);
+    	            c = (char) ((char) ((i ^ (key % i)) % 10) ^ key);
     	            break;
     	        default:
     	            c = 64;
@@ -145,43 +151,43 @@ public class StringEncryption implements ClassModifier {
     	            break;
     	        case 1:
     	        	int key2 = 1000000000;
-    	            c = (char) ((char) ((i ^ key2) % 10) ^ key2);
+    	            c = (char) ((char) ((i ^ key2 % i) % 10) ^ key2);
     	            break;
     	        case 2:
     	        	int key3 = 1000000000;
-    	            c = (char) ((char) ((i ^ key3) % 10) ^ key3);
+    	            c = (char) ((char) ((i ^ key3 % i) % 10) ^ key3);
     	            break;
     	        case 3:
     	        	int key4 = 1000000000;
-    	            c = (char) ((char) ((i ^ key4) % 10) ^ key4);
+    	            c = (char) ((char) ((i ^ key4 % i) % 10) ^ key4);
     	            break;
     	        case 4:
     	        	int key5 = 1000000000;
-    	            c = (char) ((char) ((i ^ key5) % 10) ^ key5);
+    	            c = (char) ((char) ((i ^ key5 % i) % 10) ^ key5);
     	            break;
     	        case 5:
     	        	int key6 = 1000000000;
-    	            c = (char) ((char) ((i ^ key6) % 10) ^ key6);
+    	            c = (char) ((char) ((i ^ key6 % i) % 10) ^ key6);
     	            break;
     	        case 6:
     	        	int key7 = 1000000000;
-    	            c = (char) ((char) ((i ^ key7) % 10) ^ key7);
+    	            c = (char) ((char) ((i ^ key7 % i) % 10) ^ key7);
     	            break;
     	        case 7:
     	        	int key8 = 1000000000;
-    	            c = (char) ((char) ((i ^ key8) % 10) ^ key8);
+    	            c = (char) ((char) ((i ^ key8 % i) % 10) ^ key8);
     	            break;
     	        case 8:
     	        	int key9 = 1000000000;
-    	            c = (char) ((char) ((i ^ key9) % 10) ^ key9);
+    	            c = (char) ((char) ((i ^ key9 % i) % 10) ^ key9);
     	            break;
     	        case 9:
     	        	int key10 = 1000000000;
-    	            c = (char) ((char) ((i ^ key10) % 10) ^ key10);
+    	            c = (char) ((char) ((i ^ key10 % i) % 10) ^ key10);
     	            break;
     	        case 10:
     	        	int key11 = 1000000000;
-    	            c = (char) ((char) ((i ^ key11) % 10) ^ key11);
+    	            c = (char) ((char) ((i ^ key11 % i) % 10) ^ key11);
     	            break;
     	        default:
     	            c = 64;
@@ -201,34 +207,34 @@ public class StringEncryption implements ClassModifier {
     	            c = (char) ((char) ((i ^ 1000000000) % 10) ^ 1000000000);
     	            break;
     	        case 1:
-    	            c = (char) ((char) ((i ^ 1000000000) % 10) ^ 1000000000);
+    	            c = (char) ((char) ((i ^ 1000000000 % i) % 10) ^ 1000000000);
     	            break;
     	        case 2:
-    	            c = (char) ((char) ((i ^ 1000000000) % 10) ^ 1000000000);
+    	            c = (char) ((char) ((i ^ 1000000000 % i) % 10) ^ 1000000000);
     	            break;
     	        case 3:
-    	            c = (char) ((char) ((i ^ 1000000000) % 10) ^ 1000000000);
+    	            c = (char) ((char) ((i ^ 1000000000 % i) % 10) ^ 1000000000);
     	            break;
     	        case 4:
-    	            c = (char) ((char) ((i ^ 1000000000) % 10) ^ 1000000000);
+    	            c = (char) ((char) ((i ^ 1000000000 % i) % 10) ^ 1000000000);
     	            break;
     	        case 5:
-    	            c = (char) ((char) ((i ^ 1000000000) % 10) ^ 1000000000);
+    	            c = (char) ((char) ((i ^ 1000000000 % i) % 10) ^ 1000000000);
     	            break;
     	        case 6:
-    	            c = (char) ((char) ((i ^ 1000000000) % 10) ^ 1000000000);
+    	            c = (char) ((char) ((i ^ 1000000000 % i) % 10) ^ 1000000000);
     	            break;
     	        case 7:
-    	            c = (char) ((char) ((i ^ 1000000000) % 10) ^ 1000000000);
+    	            c = (char) ((char) ((i ^ 1000000000 % i) % 10) ^ 1000000000);
     	            break;
     	        case 8:
-    	            c = (char) ((char) ((i ^ 1000000000) % 10) ^ 1000000000);
+    	            c = (char) ((char) ((i ^ 1000000000 % i) % 10) ^ 1000000000);
     	            break;
     	        case 9:
-    	            c = (char) ((char) ((i ^ 1000000000) % 10) ^ 1000000000);
+    	            c = (char) ((char) ((i ^ 1000000000 % i) % 10) ^ 1000000000);
     	            break;
     	        case 10:
-    	            c = (char) ((char) ((i ^ 1000000000) % 10) ^ 1000000000);
+    	            c = (char) ((char) ((i ^ 1000000000 % i) % 10) ^ 1000000000);
     	            break;
     	        default:
     	            c = 64;
@@ -251,34 +257,34 @@ public class StringEncryption implements ClassModifier {
     	            c = (char) ((char) ((i ^ key) % 10) ^ key);
     	            break;
     	        case 1:
-    	            c = (char) ((char) ((i ^ key) % 10) ^ key);
+    	            c = (char) ((char) ((i ^ key % i) % 10) ^ key);
     	            break;
     	        case 2:
-    	            c = (char) ((char) ((i ^ key) % 10) ^ key);
+    	            c = (char) ((char) ((i ^ key % i) % 10) ^ key);
     	            break;
     	        case 3:
-    	            c = (char) ((char) ((i ^ key) % 10) ^ key);
+    	            c = (char) ((char) ((i ^ key % i) % 10) ^ key);
     	            break;
     	        case 4:
-    	            c = (char) ((char) ((i ^ key) % 10) ^ key);
+    	            c = (char) ((char) ((i ^ key % i) % 10) ^ key);
     	            break;
     	        case 5:
-    	            c = (char) ((char) ((i ^ key) % 10) ^ key);
+    	            c = (char) ((char) ((i ^ key % i) % 10) ^ key);
     	            break;
     	        case 6:
-    	            c = (char) ((char) ((i ^ key) % 10) ^ key);
+    	            c = (char) ((char) ((i ^ key % i) % 10) ^ key);
     	            break;
     	        case 7:
-    	            c = (char) ((char) ((i ^ key) % 10) ^ key);
+    	            c = (char) ((char) ((i ^ key % i) % 10) ^ key);
     	            break;
     	        case 8:
-    	            c = (char) ((char) ((i ^ key) % 10) ^ key);
+    	            c = (char) ((char) ((i ^ key % i) % 10) ^ key);
     	            break;
     	        case 9:
-    	            c = (char) ((char) ((i ^ key) % 10) ^ key);
+    	            c = (char) ((char) ((i ^ key % i) % 10) ^ key);
     	            break;
     	        case 10:
-    	            c = (char) ((char) ((i ^ key) % 10) ^ key);
+    	            c = (char) ((char) ((i ^ key % i) % 10) ^ key);
     	            break;
     	        default:
     	            c = 64;
