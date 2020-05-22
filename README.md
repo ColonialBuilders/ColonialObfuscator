@@ -2,6 +2,8 @@
 Java Obfuscator in Beta using ASM Library
 
 Before Obfuscation
+
+
     @Override
     public void run() {
         do {
@@ -14,7 +16,10 @@ Before Obfuscation
             System.out.println("int " + ++a);
         } while (true);
     }
+    
 After Obfuscation
+
+
     @Override
     public void run() {
         do {
