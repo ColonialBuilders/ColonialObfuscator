@@ -19,19 +19,22 @@ Before Obfuscation
     
 After Obfuscation
 
-
     @Override
     public void run() {
         do {
             try {
                 Thread.sleep(500L);
+                if (0 != 0) {
+                    return;
+                }
             }
-            catch (InterruptedException ColonialObfuscator_2800725482253282661127458207272034022347284052755528347) {
-                System.out.println(ColonialObfuscator_2800725482253282661127458207272034022347284052755528347);
+            catch (InterruptedException e) {
+                System.out.println(e);
             }
-            System.out.println(Sender.2243723955267802685724238257242830622852281832190225217((char[])Sender.2411721019268352396522401255212806322301270322260221155((String)"\u5025\u5023\u5030\u5065")) + ++a);
-        } while (true);
+            System.out.println(Sender.ColonialObfuscator_2808627728259872418421589262942461925720232642239823421((char[])Sender.ColonialObfuscator_2391924132244302371628207238292291222328255902813522945((String)"\u4ef7\u4ef1\u4ee4\u4eb1")) + ++a);
+        } while (2 <= 2);
     }
+
 
 
 
