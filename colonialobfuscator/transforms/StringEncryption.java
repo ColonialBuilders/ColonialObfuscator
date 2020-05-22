@@ -42,7 +42,8 @@ public class StringEncryption implements ClassModifier {
 		node.methods.add(method);
 		MethodNode method2 = null;
 	    try {
-			method2 = NodeUtils.getMethod(NodeUtils.toNode(getClass().getName()), new Random().nextBoolean() ? "enArr" : "enArr2");
+			method2 = NodeUtils.getMethod(NodeUtils.toNode(getClass().getName()), new Random().nextBoolean() ? "enArr" : 
+				new Random().nextBoolean() ? "enArr2" : "enArr3");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -132,7 +133,64 @@ public class StringEncryption implements ClassModifier {
     	}
     	return new String(cArr).intern();
     	}
-    
+    private static String enArr3(char[] cArr) {
+    	char c;
+    	int length = cArr.length;
+    	for (int i = 0; length > i; i++) {
+    	    char c2 = cArr[i];
+    	    switch (i % 10) {
+    	        case 0:
+    	        	int key = 1000000000;
+    	            c = (char) ((char) ((i ^ key) % 10) ^ key);
+    	            break;
+    	        case 1:
+    	        	int key2 = 1000000000;
+    	            c = (char) ((char) ((i ^ key2) % 10) ^ key2);
+    	            break;
+    	        case 2:
+    	        	int key3 = 1000000000;
+    	            c = (char) ((char) ((i ^ key3) % 10) ^ key3);
+    	            break;
+    	        case 3:
+    	        	int key4 = 1000000000;
+    	            c = (char) ((char) ((i ^ key4) % 10) ^ key4);
+    	            break;
+    	        case 4:
+    	        	int key5 = 1000000000;
+    	            c = (char) ((char) ((i ^ key5) % 10) ^ key5);
+    	            break;
+    	        case 5:
+    	        	int key6 = 1000000000;
+    	            c = (char) ((char) ((i ^ key6) % 10) ^ key6);
+    	            break;
+    	        case 6:
+    	        	int key7 = 1000000000;
+    	            c = (char) ((char) ((i ^ key7) % 10) ^ key7);
+    	            break;
+    	        case 7:
+    	        	int key8 = 1000000000;
+    	            c = (char) ((char) ((i ^ key8) % 10) ^ key8);
+    	            break;
+    	        case 8:
+    	        	int key9 = 1000000000;
+    	            c = (char) ((char) ((i ^ key9) % 10) ^ key9);
+    	            break;
+    	        case 9:
+    	        	int key10 = 1000000000;
+    	            c = (char) ((char) ((i ^ key10) % 10) ^ key10);
+    	            break;
+    	        case 10:
+    	        	int key11 = 1000000000;
+    	            c = (char) ((char) ((i ^ key11) % 10) ^ key11);
+    	            break;
+    	        default:
+    	            c = 64;
+    	            break;
+    	    }
+    	    cArr[i] = (char) (c ^ c2);
+    	}
+    	return new String(cArr).intern();
+    	}
     private static String enArr2(char[] cArr) {
     	char c;
     	int length = cArr.length;
