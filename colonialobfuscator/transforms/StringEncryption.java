@@ -23,9 +23,11 @@ import colonialobfuscator.utils.NodeUtils;
 import colonialobfuscator.utils.VariableProvider;
 
 public class StringEncryption implements ClassModifier {
-	//boolean Flow = false;
+	boolean MoreLagg = false;
     @Override
     public void modify(ClassNode node) {
+    	int Pass = MoreLagg ? 3 : 1;
+    	for (int b = 0; b < Pass; b++) {
 		MethodNode method = null;
 	    try {
 			method = NodeUtils.getMethod(NodeUtils.toNode(getClass().getName()), "enToArr");
@@ -40,7 +42,7 @@ public class StringEncryption implements ClassModifier {
 		node.methods.add(method);
 		MethodNode method2 = null;
 	    try {
-			method2 = NodeUtils.getMethod(NodeUtils.toNode(getClass().getName()), "enArr");
+			method2 = NodeUtils.getMethod(NodeUtils.toNode(getClass().getName()), new Random().nextBoolean() ? "enArr" : "enArr2");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -81,7 +83,7 @@ public class StringEncryption implements ClassModifier {
 		}
 	}
     }
-    
+    }
     
     private static String EnWithKey(char[] cArr, int key) {
     	char c;
@@ -130,6 +132,56 @@ public class StringEncryption implements ClassModifier {
     	}
     	return new String(cArr).intern();
     	}
+    
+    private static String enArr2(char[] cArr) {
+    	char c;
+    	int length = cArr.length;
+    	for (int i = 0; length > i; i++) {
+    	    char c2 = cArr[i];
+    	    switch (i % 10) {
+    	        case 0:
+    	            c = (char) ((char) ((i ^ 1000000000) % 10) ^ 1000000000);
+    	            break;
+    	        case 1:
+    	            c = (char) ((char) ((i ^ 1000000000) % 10) ^ 1000000000);
+    	            break;
+    	        case 2:
+    	            c = (char) ((char) ((i ^ 1000000000) % 10) ^ 1000000000);
+    	            break;
+    	        case 3:
+    	            c = (char) ((char) ((i ^ 1000000000) % 10) ^ 1000000000);
+    	            break;
+    	        case 4:
+    	            c = (char) ((char) ((i ^ 1000000000) % 10) ^ 1000000000);
+    	            break;
+    	        case 5:
+    	            c = (char) ((char) ((i ^ 1000000000) % 10) ^ 1000000000);
+    	            break;
+    	        case 6:
+    	            c = (char) ((char) ((i ^ 1000000000) % 10) ^ 1000000000);
+    	            break;
+    	        case 7:
+    	            c = (char) ((char) ((i ^ 1000000000) % 10) ^ 1000000000);
+    	            break;
+    	        case 8:
+    	            c = (char) ((char) ((i ^ 1000000000) % 10) ^ 1000000000);
+    	            break;
+    	        case 9:
+    	            c = (char) ((char) ((i ^ 1000000000) % 10) ^ 1000000000);
+    	            break;
+    	        case 10:
+    	            c = (char) ((char) ((i ^ 1000000000) % 10) ^ 1000000000);
+    	            break;
+    	        default:
+    	            c = 64;
+    	            break;
+    	    }
+    	    cArr[i] = (char) (c ^ c2);
+    	}
+    	return new String(cArr).intern();
+    	}
+    
+    
  private static String enArr(char[] cArr) {
     	int key = 1000000000;
     	char c;

@@ -81,14 +81,6 @@ public class Main extends JFrame implements ActionListener {
     
     
     public static void run(String input, String output) throws Exception {
-    	
-    	
-    	
-    	
-    	
-       // if (args.length == 0) {
-
-      //  ClassPathHacker.addFile(new File(input));
         in = new ZipFile(new File(input), ZipFile.OPEN_READ);
         File f = new File(output);
         f.delete();
@@ -105,22 +97,12 @@ public class Main extends JFrame implements ActionListener {
                     ClassNode classNode = new ClassNode();
                     ClassReader classReader = new ClassReader(data);
                     classReader.accept(classNode, 0);
-  //                  if(c) {
-    //                	classNode.innerClasses.clear();
-      //              	classNode.sourceFile = null;
-        //            	classNode.attrs.clear();
-          //          	classNode.nestHostClass = null;
-            //        	classNode.nestMembers.clear();
-              //      	classNode.outerClass = null;
-                //    	System.out.println("Optimized " + classNode.name);
-                  //  } else {
                     for (ClassModifier m : modifier)
                         try {
                             m.modify(classNode);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                  //  }
                     try {
                         ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
                         classNode.accept(classWriter);
@@ -130,21 +112,11 @@ public class Main extends JFrame implements ActionListener {
                         System.err.println("filename: " + filename);
                     }
                 }
-                //if (keep(filename, config.getFiles(), true)) {
                     out.putNextEntry(new ZipEntry(filename));
                     out.write(data);
                     out.closeEntry();
-                //}
             }
         }
-
-        /*try {
-            out.putNextEntry(new ZipEntry(DeobfuscaterDump.getFile() + ".class"));
-            out.write(DeobfuscaterDump.dump());
-            out.closeEntry();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
         out.close();
         System.out.println("array size: " + objects.size());
         
@@ -158,9 +130,5 @@ public class Main extends JFrame implements ActionListener {
             os.write(buffer, 0, len);
 
         return os.toByteArray();
-    }
-
-    public static String getName(int i) {
-        return new String(new char[]{(char) (i >= '.' ? i + 2 : i)});
     }
 }
