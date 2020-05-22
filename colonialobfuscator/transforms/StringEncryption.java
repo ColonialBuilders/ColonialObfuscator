@@ -23,7 +23,7 @@ public class StringEncryption implements ClassModifier {
 			e.printStackTrace();
 		}
 	    method.access = ACC_PRIVATE | ACC_STATIC;
-		method.name = NameGen.String(10);
+		method.name = "ColonialObfuscator_" + NameGen.String(10);
 		for(LocalVariableNode var : method.localVariables) {
 			var.name = "ColonialObfuscator_" + NameGen.String(10);
 		}
@@ -36,7 +36,7 @@ public class StringEncryption implements ClassModifier {
 		}
 	    int key = new Random().nextInt(9000) + 20000;
 	    method2.access = ACC_PRIVATE | ACC_STATIC;
-		method2.name = NameGen.String(10);
+		method2.name = "ColonialObfuscator_" + NameGen.String(10);
 		for(AbstractInsnNode i : method2.instructions) {
 			if(i instanceof LdcInsnNode) {
 				if((int)((LdcInsnNode)i).cst > 1000) {
@@ -61,7 +61,6 @@ public class StringEncryption implements ClassModifier {
 			if (s.length() == 0) {
 				continue;
 			}
-			AbstractInsnNode x = ain.getNext();
 			mn.instructions.insertBefore(ain, new LdcInsnNode(EnWithKey(enToArr(s), key)));
 			mn.instructions.insertBefore(ain, new MethodInsnNode(INVOKESTATIC, node.name, method.name, method.desc));
 			mn.instructions.insertBefore(ain, new MethodInsnNode(INVOKESTATIC, node.name, method2.name, method2.desc));
