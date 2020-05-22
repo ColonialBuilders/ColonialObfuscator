@@ -88,7 +88,7 @@ public class Main extends JFrame implements ActionListener {
     	
        // if (args.length == 0) {
 
-        ClassPathHacker.addFile(new File(input));
+      //  ClassPathHacker.addFile(new File(input));
         in = new ZipFile(new File(input), ZipFile.OPEN_READ);
         File f = new File(output);
         f.delete();
