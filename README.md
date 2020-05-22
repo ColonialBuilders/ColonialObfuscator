@@ -1,5 +1,5 @@
 # ColonialObfuscator
-Java Obfuscator in Beta
+Java Obfuscator in Beta using ASM Library
 
 
 
