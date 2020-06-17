@@ -70,8 +70,8 @@ public class OutputUtil {
 	                        cr.accept(classNode, 0);
 	                        
 	                        for (ClassModifier m : modules()) {
-								m.modify(classNode);
-							}
+					m.modify(classNode);
+				}
 
 	                        ClassWriter cw = new ClassWriter(0);
 	                        classNode.accept(cw);
@@ -98,7 +98,7 @@ public class OutputUtil {
 	            out.close();
 	        }
 		} catch (Exception e) {
-		}
+	}
 
         System.out.println("[Stopped] array size == " + modules().size());
     }
@@ -115,7 +115,7 @@ public class OutputUtil {
                 inputStream.close();
                 outputStream.closeEntry();
             }
-		} catch (Exception e) {}
+	} catch (Exception e) {}
     }
     
 }
