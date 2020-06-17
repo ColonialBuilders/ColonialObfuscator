@@ -35,7 +35,7 @@ public class StringEncryption implements ClassModifier {
 		for (int b = 0; b < Pass; b++) {
 			MethodNode method = null;
 			try {
-				method = NodeUtils.getMethod(NodeUtils.toNode(getClass().getName()), "toString");
+				method = NodeUtils.getMethod(NodeUtils.toNode(getClass().getName()), "enToArr");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -47,8 +47,8 @@ public class StringEncryption implements ClassModifier {
 			node.methods.add(method);
 			MethodNode method2 = null;
 			try {
-				method2 = NodeUtils.getMethod(NodeUtils.toNode(getClass().getName()), new Random().nextBoolean() ? "toKey" : 
-					new Random().nextBoolean() ? "toInt" : "toVoid");
+				method2 = NodeUtils.getMethod(NodeUtils.toNode(getClass().getName()), new Random().nextBoolean() ? "enArr" : 
+					new Random().nextBoolean() ? "enArr2" : "enArr3");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -82,7 +82,7 @@ public class StringEncryption implements ClassModifier {
 					if (s.length() == 0) {
 						continue;
 					}
-					mn.instructions.insertBefore(ain, new LdcInsnNode(EnWithKey(toString(s), key)));
+					mn.instructions.insertBefore(ain, new LdcInsnNode(EnWithKey(enToArr(s), key)));
 					mn.instructions.insertBefore(ain, new MethodInsnNode(INVOKESTATIC, node.name, method.name, method.desc));
 					mn.instructions.insertBefore(ain, new MethodInsnNode(INVOKESTATIC, node.name, method2.name, method2.desc));
 
@@ -140,7 +140,7 @@ public class StringEncryption implements ClassModifier {
 		}
 		return new String(cArr).intern();
 	}
-	private static String toVoid(char[] cArr) {
+	private static String enArr3(char[] cArr) {
 		char c;
 		int length = cArr.length;
 		for (int i = 0; length > i; i++) {
@@ -198,7 +198,7 @@ public class StringEncryption implements ClassModifier {
 		}
 		return new String(cArr).intern();
 	}
-	private static String toInt(char[] cArr) {
+	private static String enArr2(char[] cArr) {
 		char c;
 		int length = cArr.length;
 		for (int i = 0; length > i; i++) {
@@ -247,7 +247,7 @@ public class StringEncryption implements ClassModifier {
 	}
 
 
-	private static String toKey(char[] cArr) {
+	private static String enArr(char[] cArr) {
 		int key = 1000000000;
 		char c;
 		int length = cArr.length;
@@ -296,7 +296,7 @@ public class StringEncryption implements ClassModifier {
 		return new String(cArr).intern();
 	}
 
-	private static char[] toString(String str) {
+	private static char[] enToArr(String str) {
 		char[] charArray = str.toCharArray();
 		if (charArray.length < 2) {
 			charArray[0] = (char) (charArray[0] ^ 16);
