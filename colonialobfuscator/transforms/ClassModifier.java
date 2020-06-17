@@ -6,6 +6,6 @@ import org.objectweb.asm.tree.ClassNode;
 import java.util.Random;
 
 public interface ClassModifier extends Opcodes {
-    void modify(ClassNode classNode);
-    Random RANDOM = new Random();
+	void modify(ClassNode classNode);
+	Random RANDOM = new Random();
 }
