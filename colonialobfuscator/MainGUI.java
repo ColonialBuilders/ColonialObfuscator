@@ -49,8 +49,8 @@ public class MainGUI extends JFrame {
 	public MainGUI() {
 		setTitle("ColonialObfuscator GUI");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setLocationRelativeTo(null);
 		setBounds(100, 100, 881, 522);
+		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
 		setContentPane(contentPane);
