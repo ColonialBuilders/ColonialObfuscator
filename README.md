@@ -19,20 +19,22 @@ Before Obfuscation
     
 After Obfuscation
 
+        
     @Override
     public void run() {
         do {
             try {
                 Thread.sleep(500L);
-                if (0 != 0) {
+                if (0 > 0) {
                     return;
                 }
             }
-            catch (InterruptedException e) {
-                System.out.println(e);
+            catch (InterruptedException ColonialObfuscator_垜懝悇守拯孆榩俫吟榇毆撰墈咭殟仭妺浾喯殕氷帉婀国惫横倾櫪嚭厑旆渒嬅夣噰唐榴欶楶枆嵽) {
+                System.out.println(ColonialObfuscator_垜懝悇守拯孆榩俫吟榇毆撰墈咭殟仭妺浾喯殕氷帉婀国惫横倾櫪嚭厑旆渒嬅夣噰唐榴欶楶枆嵽);
             }
-            System.out.println(Sender.ColonialObfuscator_2808627728259872418421589262942461925720232642239823421((char[])Sender.ColonialObfuscator_2391924132244302371628207238292291222328255902813522945((String)"\u4ef7\u4ef1\u4ee4\u4eb1")) + ++a);
-        } while (2 <= 2);
+            ++Sender.a;
+            System.out.println(ColonialObfuscator_忩噁峷捄坚侂憿槑亢墢敞囎孴嵯榣槤捺介尿寸厨巎洃佣塅榭宩动圍漑慯侫忠嶚湥櫛毶嘀命堅巹("夘够夅契") + Sender.a);
+        } while (-4 < 0);
     }
 
 
