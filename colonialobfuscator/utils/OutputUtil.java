@@ -31,11 +31,11 @@ public class OutputUtil {
 		
 		modifier.clear();
 		
-		if(ObfuscationPanel.flowObfuscationCheckBox.isSelected()) {
-			modifier.add(new ModifierFlow());
-		}
 		if(ObfuscationPanel.StringEcryptionCheckBox.isSelected()) {
 			modifier.add(new StringEncryption());
+		}
+		if(ObfuscationPanel.flowObfuscationCheckBox.isSelected()) {
+			modifier.add(new ModifierFlow());
 		}
 		if(ObfuscationPanel.OptimizeCheckBox.isSelected()) {
 			modifier.add(new ModifierOptimizeCheck());
@@ -49,6 +49,9 @@ public class OutputUtil {
 		if(ObfuscationPanel.localvariablesCheckBox.isSelected()) {
 			modifier.add(new LocalVariables());
 		}
+		
+		StringEncryption.Methods.clear();
+		
 		return modifier;
 	}
 

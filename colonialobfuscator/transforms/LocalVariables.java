@@ -16,9 +16,11 @@ public class LocalVariables implements ClassModifier {
 			for(LocalVariableNode var : method.localVariables) {
 				var.name = NameGen.colonial() + NameGen.String(Integer.parseInt(namesLenghtField.getText()));
 			}
+			if(method.parameters != null && method.parameters.size() > 0) {
 			for(ParameterNode var : method.parameters) {
 				var.name = NameGen.colonial() + NameGen.String(Integer.parseInt(namesLenghtField.getText()));
 			}
+		}
 		}
 	}
 }

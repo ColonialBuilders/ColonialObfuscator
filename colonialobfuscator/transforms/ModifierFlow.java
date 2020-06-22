@@ -27,6 +27,8 @@ public class ModifierFlow implements ClassModifier {
 		node.fields.add(f);
 
 		for (MethodNode method : node.methods) {
+			if(!method.name.startsWith("<")) {
+			if(!StringEncryption.Methods.contains(method.name)) {
 			for (AbstractInsnNode insnNode : method.instructions.toArray()) {
 
 				//https://github.com/superblaubeere27/obfuscator/blob/master/obfuscator-core/src/main/java/me/superblaubeere27/jobf/processors/flowObfuscation/FlowObfuscator.java
@@ -45,6 +47,8 @@ public class ModifierFlow implements ClassModifier {
 				if (insnNode.getOpcode() == Opcodes.DUP)
 					method.instructions.insert(insnNode, new InsnNode(Opcodes.SWAP));
 			}
+		}
+	}
 		}
 	}
 	static Random random = new Random();

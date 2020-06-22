@@ -6,6 +6,7 @@ import static colonialobfuscator.guis.SettingsPanel.namesLenghtField;
 
 import java.io.IOException;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -27,13 +28,14 @@ import colonialobfuscator.utils.NodeUtils;
 import colonialobfuscator.utils.VariableProvider;
 
 public class StringEncryption implements ClassModifier {
-
+	public static ArrayList<String> Methods = new ArrayList<String>();
 	boolean MoreLagg = massLaggEnabledCheckBox.isSelected();
 	@Override
 	public void modify(ClassNode node) {
 		int Pass = MoreLagg ? Integer.parseInt(massLaggField.getText()) : 1;
 		for (int b = 0; b < Pass; b++) {
 			//TODO Add BitShift
+			
 			
 			
 			MethodNode method = null;
@@ -81,11 +83,11 @@ public class StringEncryption implements ClassModifier {
 			
 			
 			node.methods.add(method);
-
+			Methods.add(method.name);
 		}
 	}
 /*
- *     static String EnWithXOR(String a, int Key) {
+ *     static String EnWithBIT(String a, int Key) {
     	int key = Key;
     	StringBuilder b = new StringBuilder();
     	for(char d : a.toCharArray()) {
@@ -94,7 +96,7 @@ public class StringEncryption implements ClassModifier {
     	}
     	return b.toString();
     }
-    static String DeWithXOR(String a) {
+    static String DeWithBIT(String a) {
     	int key = 10000000;
     	StringBuilder b = new StringBuilder();
     	for(char d : a.toCharArray()) {
