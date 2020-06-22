@@ -1,6 +1,6 @@
 package colonialobfuscator.transforms;
 
-import java.io.IOException;
+import static colonialobfuscator.guis.SettingsPanel.namesLenghtField;
 
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.LocalVariableNode;
@@ -8,18 +8,17 @@ import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.ParameterNode;
 
 import colonialobfuscator.utils.NameGen;
-import colonialobfuscator.utils.NodeUtils;
 
 public class LocalVariables implements ClassModifier {
-    @Override
-    public void modify(ClassNode node) {
-    	for(MethodNode method : node.methods) {
-		for(LocalVariableNode var : method.localVariables) {
-			var.name = "ColonialObfuscator_" + NameGen.String(10);
+	@Override
+	public void modify(ClassNode node) {
+		for(MethodNode method : node.methods) {
+			for(LocalVariableNode var : method.localVariables) {
+				var.name = NameGen.colonial() + NameGen.String(Integer.parseInt(namesLenghtField.getText()));
+			}
+			for(ParameterNode var : method.parameters) {
+				var.name = NameGen.colonial() + NameGen.String(Integer.parseInt(namesLenghtField.getText()));
+			}
 		}
-		for(ParameterNode var : method.parameters) {
-			var.name = "ColonialObfuscator_" + NameGen.String(10);
-		}
-    	}
-    }
+	}
 }

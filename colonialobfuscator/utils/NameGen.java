@@ -3,6 +3,7 @@ package colonialobfuscator.utils;
 import java.util.Random;
 
 public class NameGen {
+	
 	static boolean StringInt = true;
 	public static String String(int i) {
 		StringBuilder string = new StringBuilder();
@@ -16,6 +17,10 @@ public class NameGen {
 			i2++;
 		}
 		return string.toString();
+	}
+	
+	public static String colonial() {
+		return "ColonialObfuscator_";
 	}
 
 }
