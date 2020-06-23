@@ -92,7 +92,7 @@ public class MainGUI extends JFrame {
                 	return;
                 }
         		if(massLaggField.getText().isEmpty() || massLaggField.getText() == null || !massLaggField.isEditable() || !massLaggField.isEnabled()) {
-        			massLaggField.setText("0");
+        			massLaggField.setText("1"); // internal string not encrypted fixed
         		}
         		if(namesLenghtField.getText().isEmpty() || namesLenghtField.getText() == null) {
         			namesLenghtField.setText("40");
