@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class NameGen {
 	
-	static boolean StringInt = true;
+	static boolean StringInt = false;
 	public static String String(int i) {
 		StringBuilder string = new StringBuilder();
 		int i2 = 0;

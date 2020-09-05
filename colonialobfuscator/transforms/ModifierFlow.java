@@ -14,6 +14,8 @@ import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.JumpInsnNode;
 import org.objectweb.asm.tree.LabelNode;
+import org.objectweb.asm.tree.LdcInsnNode;
+import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
 import colonialobfuscator.utils.NameGen;
@@ -23,26 +25,41 @@ public class ModifierFlow implements ClassModifier {
 
 	@Override
 	public void modify(ClassNode node) {
-		FieldNode f = new FieldNode(ACC_STATIC | ACC_FINAL, NameGen.colonial() + NameGen.String(Integer.parseInt(namesLenghtField.getText())), "I", null, null);
-		node.fields.add(f);
+	//	FieldNode f = new FieldNode(ACC_STATIC | ACC_FINAL, NameGen.colonial() + NameGen.String(Integer.parseInt(namesLenghtField.getText())), "I", null, null);
+		//node.fields.add(f);
 
 		for (MethodNode method : node.methods) {
 			if(!method.name.startsWith("<")) {
-			if(!StringEncryption.Methods.contains(method.name)) {
 			for (AbstractInsnNode insnNode : method.instructions.toArray()) {
 
 				//https://github.com/superblaubeere27/obfuscator/blob/master/obfuscator-core/src/main/java/me/superblaubeere27/jobf/processors/flowObfuscation/FlowObfuscator.java
-				if (insnNode instanceof JumpInsnNode && insnNode.getOpcode() == Opcodes.GOTO) {
+		/*		if (insnNode instanceof JumpInsnNode && insnNode.getOpcode() == Opcodes.GOTO) {
 					JumpInsnNode insnNode2 = (JumpInsnNode) insnNode;
 					final InsnList insnList = new InsnList();
 					insnList.add(ifGoto(insnNode2.label, method, Type.getReturnType(method.desc), f, node));
 					method.instructions.insert(insnNode, insnList);
 					method.instructions.remove(insnNode);
-				}
+				}*/
+		if (insnNode.getOpcode() == Opcodes.DUP || 
+				insnNode.getOpcode() == Opcodes.POP || 
+				insnNode.getOpcode() == Opcodes.SWAP ||
+				insnNode.getOpcode() == Opcodes.FSUB ||
+				insnNode.getOpcode() == Opcodes.ISUB ||
+				insnNode.getOpcode() == Opcodes.DSUB ||
+				insnNode.getOpcode() == Opcodes.ATHROW
+				) {
+			//
+			//C:\Users\goode\Desktop\obf\ParticleSystem-OBF.jar
+			for (int i = 0; i < 1 + new Random().nextInt(5); i++) {
+              method.instructions.insertBefore(insnNode, new LdcInsnNode(NameGen.String(new Random().nextInt(5))));
+              method.instructions.insertBefore(insnNode, new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "java/lang/String", "length", "()I", false));
+              method.instructions.insertBefore(insnNode, new InsnNode(Opcodes.POP));
+			}
+		}
 
 				// NOP
-				if (RANDOM.nextInt(144) == 0)
-					method.instructions.insertBefore(insnNode, new InsnNode(Opcodes.NOP));
+				//if (RANDOM.nextInt(144) == 0)
+				//	method.instructions.insertBefore(insnNode, new InsnNode(Opcodes.NOP));
 				// DUP SWAP
 				if (insnNode.getOpcode() == Opcodes.DUP)
 					method.instructions.insert(insnNode, new InsnNode(Opcodes.SWAP));
@@ -50,7 +67,7 @@ public class ModifierFlow implements ClassModifier {
 		}
 	}
 		}
-	}
+	
 	static Random random = new Random();
 
 	//https://github.com/superblaubeere27/obfuscator/blob/master/obfuscator-core/src/main/java/me/superblaubeere27/jobf/processors/flowObfuscation/FlowObfuscator.java

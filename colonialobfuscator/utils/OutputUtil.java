@@ -13,7 +13,14 @@ import java.util.zip.ZipOutputStream;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.FieldInsnNode;
+import org.objectweb.asm.tree.FieldNode;
+import org.objectweb.asm.tree.InsnNode;
+import org.objectweb.asm.tree.LdcInsnNode;
+import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.TypeInsnNode;
 
 import colonialobfuscator.guis.ObfuscationPanel;
 import colonialobfuscator.transforms.ClassModifier;
@@ -60,6 +67,9 @@ public class OutputUtil {
 	        ZipFile zipFile = new ZipFile(input);
 	        Enumeration<? extends ZipEntry> entries = zipFile.entries();
 	        ZipOutputStream out = new ZipOutputStream(new FileOutputStream(output));
+	        
+	        StringEncryption.Start();
+	        
 	        try {
 	            while (entries.hasMoreElements()) {
 	                ZipEntry entry = entries.nextElement();
@@ -76,7 +86,7 @@ public class OutputUtil {
 					m.modify(classNode);
 				}
 
-	                        ClassWriter cw = new ClassWriter(0);
+	                        ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 	                        classNode.accept(cw);
 	                        
 	                        /*
@@ -97,13 +107,27 @@ public class OutputUtil {
 	                }
 	            }
 	        } finally {
+	        	StringEncryption.END();
+                       ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+                       StringEncryption.unscrambleClass.accept(cw);
+                       String name = StringEncryption.unscrambleClass.name + ".class";
+                       if(ObfuscationPanel.FakeDirectoriesCheckBox.isSelected() && name.endsWith(".class")) {
+                       	name += "/";
+                       }
+                       
+                       ZipEntry newEntry = new ZipEntry(name);
+                       out.putNextEntry(newEntry);
+                       writeToFile(out, new ByteArrayInputStream(cw.toByteArray()));
+	                   
+	                   
+	        
 	            zipFile.close();
 	            out.close();
 	        }
 		} catch (Exception e) {
 			e.printStackTrace();
 	}
-
+		StringEncryption.stringList.clear();
         System.out.println("[Stopped] array size == " + modules().size());
     }
 

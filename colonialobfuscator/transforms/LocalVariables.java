@@ -13,8 +13,10 @@ public class LocalVariables implements ClassModifier {
 	@Override
 	public void modify(ClassNode node) {
 		for(MethodNode method : node.methods) {
+			if(method.localVariables != null && method.localVariables.size() > 0) {
 			for(LocalVariableNode var : method.localVariables) {
 				var.name = NameGen.colonial() + NameGen.String(Integer.parseInt(namesLenghtField.getText()));
+			}
 			}
 			if(method.parameters != null && method.parameters.size() > 0) {
 			for(ParameterNode var : method.parameters) {
