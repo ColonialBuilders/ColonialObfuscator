@@ -25,7 +25,6 @@ import colonialobfuscator.utils.BytecodeHelper;
 import colonialobfuscator.utils.NameGen;
 
 public class StringEncryption implements ClassModifier {
-	public static ArrayList<String> Methods = new ArrayList<String>();
 	private static String FIELD_NAME = "string_store";
 	private static String CALL_NAME = "unscramble";
 	private static final String CALL_DESC = "(II)Ljava/lang/String;";

@@ -57,9 +57,7 @@ public class OutputUtil {
 		if(ObfuscationPanel.localvariablesCheckBox.isSelected()) {
 			modifier.add(new LocalVariables());
 		}
-		
-		StringEncryption.Methods.clear();
-		
+
 		return modifier;
 	}
 
@@ -181,6 +179,9 @@ public class OutputUtil {
 				} catch (final Exception e) {
 				}
 			});
+
+			//
+			outputStream.setComment("https://github.com/ColonialBuilders/ColonialObfuscator");
 			outputStream.close();
 
 
@@ -189,6 +190,8 @@ public class OutputUtil {
 		}
 
 		StringEncryption.stringList.clear();
+		ToAdd.clear();
+		classes.clear();
         System.out.println("[Stopped] array size == " + modules().size());
     }
 	private static void parseInput(String input) {
