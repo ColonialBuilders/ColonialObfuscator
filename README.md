@@ -42,4 +42,4 @@ After Obfuscation
 
 
 
-Based on https://gitlab.com/nickfreeman/SimpleObfuscator and https://github.com/superblaubeere27/obfuscator
+Based on https://gitlab.com/nickfreeman/SimpleObfuscator , https://github.com/superblaubeere27/obfuscator and https://github.com/netindev/scuti-lite
