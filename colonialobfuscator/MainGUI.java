@@ -2,7 +2,7 @@ package colonialobfuscator;
 
 import static colonialobfuscator.guis.FilePanel.input;
 import static colonialobfuscator.guis.FilePanel.output;
-import static colonialobfuscator.guis.SettingsPanel.massLaggField;
+//import static colonialobfuscator.guis.SettingsPanel.massLaggField;
 import static colonialobfuscator.guis.SettingsPanel.namesLenghtField;
 import static colonialobfuscator.utils.OutputUtil.modules;
 
@@ -91,9 +91,9 @@ public class MainGUI extends JFrame {
                 	.showMessageDialog(null, " modules size < 1 ");
                 	return;
                 }
-        		if(massLaggField.getText().isEmpty() || massLaggField.getText() == null || !massLaggField.isEditable() || !massLaggField.isEnabled()) {
-        			massLaggField.setText("0");
-        		}
+     //   		if(massLaggField.getText().isEmpty() || massLaggField.getText() == null || !massLaggField.isEditable() || !massLaggField.isEnabled()) {
+      //  			massLaggField.setText("0");
+        //		}
         		if(namesLenghtField.getText().isEmpty() || namesLenghtField.getText() == null) {
         			namesLenghtField.setText("40");
         		}

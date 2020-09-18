@@ -1,19 +1,14 @@
 package colonialobfuscator.transforms;
 
-import static colonialobfuscator.guis.SettingsPanel.massLaggEnabledCheckBox;
-
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
+import colonialobfuscator.utils.OutputUtil;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
@@ -29,27 +24,37 @@ import colonialobfuscator.utils.NameGen;
 
 public class StringEncryption implements ClassModifier {
 	public static ArrayList<String> Methods = new ArrayList<String>();
-	boolean MoreLagg = massLaggEnabledCheckBox.isSelected();
-	private static final String FIELD_NAME = "string_store";
-	private static final String CALL_NAME = "unscramble";
+	private static String FIELD_NAME = "string_store";
+	private static String CALL_NAME = "unscramble";
 	private static final String CALL_DESC = "(I)Ljava/lang/String;";
-	
-	
-	private static final String CHIPHER = NameGen.colonial();
-	
+		
 	public static ClassNode unscrambleClass;
 	public static List<String> stringList;
-	public static void Start() {
+	public static void Start() {//TODO add MassLagg(Run StringEncryption more times)
+		
+		FIELD_NAME = NameGen.String(10);
+		CALL_NAME = NameGen.String(10);
+		
+		
+		
 		stringList = new ArrayList<>();
 		unscrambleClass = new ClassNode();
 		unscrambleClass.visit(52, ACC_PUBLIC | ACC_SUPER | ACC_SYNTHETIC, NameGen.colonial() + new Random().nextLong(), null, "java/lang/Object", null);
 		unscrambleClass.visitField(ACC_PUBLIC | ACC_STATIC, FIELD_NAME, "[Ljava/lang/String;", null, null);
 	}
-	
+
 	@Override
 	public void modify(ClassNode node) {
-		node.methods.stream().forEach(this::buildStringList);
-		node.methods.stream().forEach(mn -> scramble(node, mn));
+	try {
+		if(node.methods != null && node.methods.size() > 0) {
+			node.methods.forEach(this::buildStringList);
+			for (MethodNode mn : node.methods) {
+				scramble(mn);
+			}
+		}
+	} catch (Exception ex) {
+		ex.printStackTrace();
+	}
 	}
 	public static void END() {
 		createUnscramble();
@@ -57,17 +62,20 @@ public class StringEncryption implements ClassModifier {
 			createStaticConstructor(unscrambleClass);
 		} catch (Exception ex) {
 		}
+
+		OutputUtil.ToAdd.put(unscrambleClass.name, unscrambleClass);
+
 	}
 
 	private void buildStringList(MethodNode mn) {
-		BytecodeHelper.forEach(mn.instructions, LdcInsnNode.class, ldc -> {
+		BytecodeHelper.<LdcInsnNode>forEach(mn.instructions, LdcInsnNode.class, ldc -> {
 			if (ldc.cst instanceof String && !stringList.contains(ldc.cst)) {
 				stringList.add((String) ldc.cst);
 			}
 		});
 	}
 
-	private void scramble(ClassNode cn, MethodNode mn) {
+	private void scramble(MethodNode mn) {
 		List<LdcInsnNode> ldcNodes = new LinkedList<>();
 		BytecodeHelper.forEach(mn.instructions, LdcInsnNode.class, ldcNodes::add);
 		for (LdcInsnNode node : ldcNodes) {
@@ -93,7 +101,7 @@ public class StringEncryption implements ClassModifier {
 		mv.visitEnd();
 	}
 
-	private static void createStaticConstructor(ClassNode owner) throws UnsupportedEncodingException {
+	private static void createStaticConstructor(ClassNode owner) {
 		MethodNode original = BytecodeHelper.getMethod(owner, "<clinit>", "()V");
 		MethodVisitor mv = owner.visitMethod(Opcodes.ACC_STATIC, "<clinit>", "()V", null, null);
 		// generate instructions
@@ -109,7 +117,7 @@ public class StringEncryption implements ClassModifier {
 			
 			String Key = NameGen.String(10);
 			
-			builder.aconst(new String(aesEncrypt(stringList.get(i), Key).getBytes("UTF-8")));
+			builder.aconst(new String(Objects.requireNonNull(aesEncrypt(stringList.get(i), Key)).getBytes(StandardCharsets.UTF_8)));
             builder.aconst(Key);
 			builder.visitMethodInsn(Opcodes.INVOKESTATIC, unscrambleClass.name, NAME2, "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;", false);
 			
@@ -131,14 +139,14 @@ public class StringEncryption implements ClassModifier {
 	 public static String aesEncrypt(String msg, String secret) {
 	        try {
 	            SecretKeySpec secretKey;
-	            byte[] key = secret.getBytes("UTF-8");
+	            byte[] key = secret.getBytes(StandardCharsets.UTF_8);
 	            MessageDigest sha = MessageDigest.getInstance("SHA-256");
 	            key = sha.digest(key);
 	            key = Arrays.copyOf(key, 16);
 	            secretKey = new SecretKeySpec(key, "AES");
 	            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
 	            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
-	            return Base64.getEncoder().encodeToString(cipher.doFinal(msg.getBytes("UTF-8")));
+	            return Base64.getEncoder().encodeToString(cipher.doFinal(msg.getBytes(StandardCharsets.UTF_8)));
 	        } catch (Throwable t) {
 	            // t.printStackTrace();
 	        }

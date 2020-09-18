@@ -1,12 +1,10 @@
 package colonialobfuscator.utils;
 
-import java.io.ByteArrayInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Enumeration;
-import java.util.List;
+import java.io.*;
+import java.util.*;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+import java.util.jar.JarOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
@@ -32,7 +30,10 @@ import colonialobfuscator.transforms.ModifierOptimizeCheck;
 import colonialobfuscator.transforms.StringEncryption;
 
 public class OutputUtil {
-
+	private static JarOutputStream outputStream = null;
+	public static Map<String, ClassNode> classes = new HashMap<>();
+	public static Map<String, ClassNode> ToAdd = new HashMap<>();
+	private static JarOutputStream finalOutputStream = null;
 	public static List<ClassModifier> modules() {
 		List<ClassModifier> modifier = new ArrayList<ClassModifier>(Arrays.asList());
 		
@@ -63,7 +64,7 @@ public class OutputUtil {
 	}
 
 	public static void run(String input, String output) {
-		try {
+		/*try {
 	        ZipFile zipFile = new ZipFile(input);
 	        Enumeration<? extends ZipEntry> entries = zipFile.entries();
 	        ZipOutputStream out = new ZipOutputStream(new FileOutputStream(output));
@@ -88,10 +89,7 @@ public class OutputUtil {
 
 	                        ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 	                        classNode.accept(cw);
-	                        
-	                        /*
-	                         * FakeDirectories
-	                         */
+
 	                        String name = entry.getName();
 	                        if(ObfuscationPanel.FakeDirectoriesCheckBox.isSelected() && name.endsWith(".class")) {
 	                        	name += "/";
@@ -126,12 +124,117 @@ public class OutputUtil {
 	        }
 		} catch (Exception e) {
 			e.printStackTrace();
-	}
+	}*/
+
+
+		JarFile jarFile = null;
+		try {
+			jarFile = new JarFile(input);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		JarFile finalJarFile = jarFile;
+		jarFile.stream().forEach(entry -> {
+			try {
+				if (entry.getName().endsWith(".class")) {
+					final ClassReader classReader = new ClassReader(
+							finalJarFile.getInputStream(entry));
+					final ClassNode classNode = new ClassNode();
+					classReader.accept(classNode, ClassReader.SKIP_DEBUG);
+					classes.put(classNode.name, classNode);
+				} else if (!entry.isDirectory()) {
+					finalOutputStream.putNextEntry(new ZipEntry(entry.getName()));
+					finalOutputStream
+							.write(toByteArray(finalJarFile.getInputStream(entry)));
+					finalOutputStream.closeEntry();
+				}
+			} catch (final Exception e) {
+				e.printStackTrace();
+			}
+		});
+		try {
+			jarFile.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		StringEncryption.Start();
+		try {
+			outputStream = new JarOutputStream(
+						new FileOutputStream(output));
+
+		parseInput(input);
+			classes.values().forEach(classNode -> {
+				for (ClassModifier m : modules()) {
+					m.modify(classNode);
+				}
+			});
+			StringEncryption.END();
+			classes.putAll(ToAdd);
+			classes.values().forEach(classNode -> {
+				ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+				try {
+					classNode.accept(classWriter);//Add this ObfuscationPanel.FakeDirectoriesCheckBox.isSelected()
+					final JarEntry jarEntry = new JarEntry(
+							classNode.name.concat(".class"));
+					outputStream.putNextEntry(jarEntry);
+					outputStream.write(classWriter.toByteArray());
+				} catch (final Exception e) {
+				}
+			});
+			outputStream.close();
+
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 		StringEncryption.stringList.clear();
         System.out.println("[Stopped] array size == " + modules().size());
     }
-
-    private static void writeToFile(ZipOutputStream outputStream, InputStream inputStream) {
+	private static void parseInput(String input) {
+		JarFile jarFile = null;
+		try {
+			jarFile = new JarFile(input);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		JarFile finalJarFile = jarFile;
+		jarFile.stream().forEach(entry -> {
+			try {
+				if (entry.getName().endsWith(".class")) {
+					final ClassReader classReader;
+					classReader = new ClassReader(
+							finalJarFile.getInputStream(entry));
+					final ClassNode classNode = new ClassNode();
+					classReader.accept(classNode, ClassReader.SKIP_DEBUG);
+					classes.put(classNode.name, classNode);
+				} else if (!entry.isDirectory()) {
+					outputStream.putNextEntry(new ZipEntry(entry.getName()));
+					outputStream
+							.write(toByteArray(finalJarFile.getInputStream(entry)));
+					outputStream.closeEntry();
+				}
+			} catch (final Exception e) {
+				e.printStackTrace();
+			}
+		});
+		try {
+			jarFile.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	private static byte[] toByteArray(InputStream inputStream) throws IOException {
+		final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		final byte[] buffer = new byte[0xFFFF];
+		int length;
+		while ((length = inputStream.read(buffer)) != -1) {
+			outputStream.write(buffer, 0, length);
+		}
+		outputStream.flush();
+		return outputStream.toByteArray();
+	}
+	private static void writeToFile(ZipOutputStream outputStream, InputStream inputStream) {
     	try {
             byte[] buffer = new byte[Byte.MAX_VALUE];
             try {
