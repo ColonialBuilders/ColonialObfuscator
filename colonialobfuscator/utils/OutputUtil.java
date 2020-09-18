@@ -149,7 +149,7 @@ public class OutputUtil {
 					finalOutputStream.closeEntry();
 				}
 			} catch (final Exception e) {
-				e.printStackTrace();
+			//	e.printStackTrace();
 			}
 		});
 		try {

@@ -1,5 +1,6 @@
 package colonialobfuscator.transforms;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -8,6 +9,7 @@ import java.util.*;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
+import colonialobfuscator.utils.NodeUtils;
 import colonialobfuscator.utils.OutputUtil;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
@@ -26,21 +28,23 @@ public class StringEncryption implements ClassModifier {
 	public static ArrayList<String> Methods = new ArrayList<String>();
 	private static String FIELD_NAME = "string_store";
 	private static String CALL_NAME = "unscramble";
-	private static final String CALL_DESC = "(I)Ljava/lang/String;";
+	private static final String CALL_DESC = "(II)Ljava/lang/String;";
 		
 	public static ClassNode unscrambleClass;
 	public static List<String> stringList;
+
 	public static void Start() {//TODO add MassLagg(Run StringEncryption more times)
 		
 		FIELD_NAME = NameGen.String(10);
 		CALL_NAME = NameGen.String(10);
 		
 		
-		
+
 		stringList = new ArrayList<>();
 		unscrambleClass = new ClassNode();
 		unscrambleClass.visit(52, ACC_PUBLIC | ACC_SUPER | ACC_SYNTHETIC, NameGen.colonial() + new Random().nextLong(), null, "java/lang/Object", null);
 		unscrambleClass.visitField(ACC_PUBLIC | ACC_STATIC, FIELD_NAME, "[Ljava/lang/String;", null, null);
+
 	}
 
 	@Override
@@ -60,11 +64,12 @@ public class StringEncryption implements ClassModifier {
 		createUnscramble();
 		try {
 			createStaticConstructor(unscrambleClass);
-		} catch (Exception ex) {
-		}
+
 
 		OutputUtil.ToAdd.put(unscrambleClass.name, unscrambleClass);
-
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 
 	private void buildStringList(MethodNode mn) {
@@ -84,8 +89,10 @@ public class StringEncryption implements ClassModifier {
 				if (index == -1)
 					continue;
 				MethodInsnNode call = new MethodInsnNode(Opcodes.INVOKESTATIC, unscrambleClass.name, CALL_NAME, CALL_DESC, false);
+				int key = new Random().nextInt();
 				mn.instructions.set(node, call);
-				mn.instructions.insertBefore(call, BytecodeHelper.newIntegerNode(index));
+				mn.instructions.insertBefore(call, BytecodeHelper.newIntegerNode(index ^ key));
+				mn.instructions.insertBefore(call, BytecodeHelper.newIntegerNode(key));
 			}
 		}
 	}
@@ -95,12 +102,26 @@ public class StringEncryption implements ClassModifier {
 		mv.visitCode();
 		mv.visitFieldInsn(GETSTATIC, unscrambleClass.name, FIELD_NAME, "[Ljava/lang/String;");
 		mv.visitVarInsn(ILOAD, 0);
+		mv.visitVarInsn(ILOAD, 1);
+		mv.visitInsn(IXOR);
 		mv.visitInsn(AALOAD);
+
+
+
+
+		//mv.visitMethodInsn(Opcodes.INVOKESTATIC, unscrambleClass.name, XOR_Name, mn.desc, false);
+
 		mv.visitInsn(ARETURN);
 		mv.visitMaxs(0, 0);
 		mv.visitEnd();
 	}
-
+	private static String XOR(String s, int i) {
+		StringBuilder b = new StringBuilder();
+		for(char c : s.toCharArray()) {
+		b.append((char) c ^ i);
+		}
+		return b.toString();
+	}
 	private static void createStaticConstructor(ClassNode owner) {
 		MethodNode original = BytecodeHelper.getMethod(owner, "<clinit>", "()V");
 		MethodVisitor mv = owner.visitMethod(Opcodes.ACC_STATIC, "<clinit>", "()V", null, null);
@@ -116,7 +137,7 @@ public class StringEncryption implements ClassModifier {
 			builder.iconst(i);
 			
 			String Key = NameGen.String(10);
-			
+
 			builder.aconst(new String(Objects.requireNonNull(aesEncrypt(stringList.get(i), Key)).getBytes(StandardCharsets.UTF_8)));
             builder.aconst(Key);
 			builder.visitMethodInsn(Opcodes.INVOKESTATIC, unscrambleClass.name, NAME2, "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;", false);
