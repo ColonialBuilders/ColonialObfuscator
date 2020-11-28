@@ -60,7 +60,7 @@ public class ModifierFlow implements ClassModifier {
 				//if (RANDOM.nextInt(144) == 0)
 				//	method.instructions.insertBefore(insnNode, new InsnNode(Opcodes.NOP));
 				// DUP SWAP
-				if (insnNode.getOpcode() == Opcodes.DUP) {// Anti JDGUI
+				if (insnNode.getOpcode() == Opcodes.DUP) {//Anti JDGUI
 				//	method.instructions.insert(insnNode, new InsnNode(Opcodes.SWAP));
 					method.instructions.insert(new InsnNode(Opcodes.POP2));
 					method.instructions.insert(new LdcInsnNode(NameGen.String(1)));

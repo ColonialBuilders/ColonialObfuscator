@@ -28,7 +28,7 @@ import colonialobfuscator.utils.NameGen;
 public class StringEncryption implements ClassModifier {
 	private static String FIELD_NAME = "string_store";
 	private static String CALL_NAME = "unscramble";
-	private static final String CALL_DESC = "(II)Ljava/lang/String;";
+	private static final String CALL_DESC = "(IILjava/lang/String;)Ljava/lang/String;";
 	//private static final String XOR_Name = "a";
 		
 	public static ClassNode unscrambleClass;
@@ -92,11 +92,15 @@ public class StringEncryption implements ClassModifier {
 				MethodInsnNode call = new MethodInsnNode(Opcodes.INVOKESTATIC, unscrambleClass.name, CALL_NAME, CALL_DESC, false);
 				int key = new Random().nextInt();
 				int key2 = new Random().nextInt();
+				byte[] b = new byte[new Random().nextInt(4) + 4];
+				new Random().nextBytes(b);
+				String stringkey = new String(b);
 				mn.instructions.set(node, call);
 				mn.instructions.insertBefore(call, BytecodeHelper.newIntegerNode((index ^ key) ^ key2));
 				mn.instructions.insertBefore(call, BytecodeHelper.newIntegerNode(key2));
 				mn.instructions.insertBefore(call, new InsnNode(Opcodes.IXOR));
-				mn.instructions.insertBefore(call, BytecodeHelper.newIntegerNode(key));
+				mn.instructions.insertBefore(call, BytecodeHelper.newIntegerNode(key ^ stringkey.hashCode()));
+				mn.instructions.insertBefore(call, new LdcInsnNode(stringkey));
 			}
 		}
 	}
@@ -107,6 +111,9 @@ public class StringEncryption implements ClassModifier {
 		mv.visitFieldInsn(GETSTATIC, unscrambleClass.name, FIELD_NAME, "[Ljava/lang/String;");
 		mv.visitVarInsn(ILOAD, 0);
 		mv.visitVarInsn(ILOAD, 1);
+		mv.visitVarInsn(ALOAD, 2);
+		mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/lang/String", "hashCode", "()I", false);
+		mv.visitInsn(IXOR);
 		mv.visitInsn(IXOR);
 		mv.visitInsn(AALOAD);
 
