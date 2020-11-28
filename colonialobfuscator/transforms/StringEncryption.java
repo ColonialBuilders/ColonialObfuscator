@@ -17,6 +17,7 @@ import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.commons.InstructionAdapter;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.LdcInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
@@ -28,10 +29,11 @@ public class StringEncryption implements ClassModifier {
 	private static String FIELD_NAME = "string_store";
 	private static String CALL_NAME = "unscramble";
 	private static final String CALL_DESC = "(II)Ljava/lang/String;";
+	//private static final String XOR_Name = "a";
 		
 	public static ClassNode unscrambleClass;
 	public static List<String> stringList;
-
+		
 	public static void Start() {//TODO add MassLagg(Run StringEncryption more times)
 		
 		FIELD_NAME = NameGen.String(10);
@@ -89,8 +91,11 @@ public class StringEncryption implements ClassModifier {
 					continue;
 				MethodInsnNode call = new MethodInsnNode(Opcodes.INVOKESTATIC, unscrambleClass.name, CALL_NAME, CALL_DESC, false);
 				int key = new Random().nextInt();
+				int key2 = new Random().nextInt();
 				mn.instructions.set(node, call);
-				mn.instructions.insertBefore(call, BytecodeHelper.newIntegerNode(index ^ key));
+				mn.instructions.insertBefore(call, BytecodeHelper.newIntegerNode((index ^ key) ^ key2));
+				mn.instructions.insertBefore(call, BytecodeHelper.newIntegerNode(key2));
+				mn.instructions.insertBefore(call, new InsnNode(Opcodes.IXOR));
 				mn.instructions.insertBefore(call, BytecodeHelper.newIntegerNode(key));
 			}
 		}
@@ -108,7 +113,7 @@ public class StringEncryption implements ClassModifier {
 
 
 
-		//mv.visitMethodInsn(Opcodes.INVOKESTATIC, unscrambleClass.name, XOR_Name, mn.desc, false);
+	//	mv.visitMethodInsn(Opcodes.INVOKESTATIC, unscrambleClass.name, XOR_Name, mn.desc, false);
 
 		mv.visitInsn(ARETURN);
 		mv.visitMaxs(0, 0);

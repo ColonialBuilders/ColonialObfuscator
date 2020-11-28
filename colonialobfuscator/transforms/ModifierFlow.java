@@ -48,8 +48,7 @@ public class ModifierFlow implements ClassModifier {
 				insnNode.getOpcode() == Opcodes.DSUB ||
 				insnNode.getOpcode() == Opcodes.ATHROW
 				) {
-			//
-			//C:\Users\goode\Desktop\obf\ParticleSystem-OBF.jar
+			///home/user/Desktop/ColonialObfuscator-master/Untitled-OBF.jar
 			for (int i = 0; i < 1 + new Random().nextInt(5); i++) {
               method.instructions.insertBefore(insnNode, new LdcInsnNode(NameGen.String(new Random().nextInt(5))));
               method.instructions.insertBefore(insnNode, new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "java/lang/String", "length", "()I", false));
@@ -61,8 +60,18 @@ public class ModifierFlow implements ClassModifier {
 				//if (RANDOM.nextInt(144) == 0)
 				//	method.instructions.insertBefore(insnNode, new InsnNode(Opcodes.NOP));
 				// DUP SWAP
-				if (insnNode.getOpcode() == Opcodes.DUP)
-					method.instructions.insert(insnNode, new InsnNode(Opcodes.SWAP));
+				if (insnNode.getOpcode() == Opcodes.DUP) {// Anti JDGUI
+				//	method.instructions.insert(insnNode, new InsnNode(Opcodes.SWAP));
+					method.instructions.insert(new InsnNode(Opcodes.POP2));
+					method.instructions.insert(new LdcInsnNode(NameGen.String(1)));
+					method.instructions.insert(new InsnNode(Opcodes.POP));
+					method.instructions.insert(new InsnNode(Opcodes.SWAP));
+					method.instructions.insert(new InsnNode(Opcodes.POP));
+					method.instructions.insert(new LdcInsnNode(NameGen.String(1)));
+					method.instructions.insert(new LdcInsnNode(NameGen.String(1)));
+					method.instructions.insert(new LdcInsnNode(NameGen.String(1)));
+					
+				}
 			}
 		}
 	}

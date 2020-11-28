@@ -237,19 +237,5 @@ public class OutputUtil {
 		outputStream.flush();
 		return outputStream.toByteArray();
 	}
-	private static void writeToFile(ZipOutputStream outputStream, InputStream inputStream) {
-    	try {
-            byte[] buffer = new byte[Byte.MAX_VALUE];
-            try {
-                while (inputStream.available() > 0) {
-                    int data = inputStream.read(buffer);
-                    outputStream.write(buffer, 0, data);
-                }
-            } finally {
-                inputStream.close();
-                outputStream.closeEntry();
-            }
-	} catch (Exception e) {}
-    }
     
 }
