@@ -26,6 +26,7 @@ import colonialobfuscator.transforms.LocalVariables;
 import colonialobfuscator.transforms.ModifierAccessCode;
 import colonialobfuscator.transforms.ModifierBooleans;
 import colonialobfuscator.transforms.ModifierFlow;
+import colonialobfuscator.transforms.ModifierNumbers;
 import colonialobfuscator.transforms.ModifierOptimizeCheck;
 import colonialobfuscator.transforms.StringEncryption;
 
@@ -38,7 +39,9 @@ public class OutputUtil {
 		List<ClassModifier> modifier = new ArrayList<ClassModifier>(Arrays.asList());
 		
 		modifier.clear();
-		
+		if(ObfuscationPanel.NumberObfuscationCheckBox.isSelected()) {
+			modifier.add(new ModifierNumbers());
+		}
 		if(ObfuscationPanel.StringEcryptionCheckBox.isSelected()) {
 			modifier.add(new StringEncryption());
 		}
@@ -177,6 +180,7 @@ public class OutputUtil {
 					outputStream.putNextEntry(jarEntry);
 					outputStream.write(classWriter.toByteArray());
 				} catch (final Exception e) {
+					e.printStackTrace();
 				}
 			});
 
@@ -185,12 +189,13 @@ public class OutputUtil {
 			outputStream.close();
 
 
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
 		StringEncryption.stringList.clear();
-		ToAdd.clear();
+		ToAdd.clear(); 
 		classes.clear();
         System.out.println("[Stopped] array size == " + modules().size());
     }

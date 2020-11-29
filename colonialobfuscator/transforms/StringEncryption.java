@@ -21,6 +21,7 @@ import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.LdcInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.VarInsnNode;
 
 import colonialobfuscator.utils.BytecodeHelper;
 import colonialobfuscator.utils.NameGen;

@@ -22,14 +22,10 @@ import colonialobfuscator.utils.NameGen;
 import colonialobfuscator.utils.NodeUtils;
 
 public class ModifierFlow implements ClassModifier {
-
 	@Override
 	public void modify(ClassNode node) {
-	//	FieldNode f = new FieldNode(ACC_STATIC | ACC_FINAL, NameGen.colonial() + NameGen.String(Integer.parseInt(namesLenghtField.getText())), "I", null, null);
-		//node.fields.add(f);
-
 		for (MethodNode method : node.methods) {
-			if(!method.name.startsWith("<")) {
+         if(!method.name.startsWith("<")) {
 			for (AbstractInsnNode insnNode : method.instructions.toArray()) {
 
 				//https://github.com/superblaubeere27/obfuscator/blob/master/obfuscator-core/src/main/java/me/superblaubeere27/jobf/processors/flowObfuscation/FlowObfuscator.java
@@ -50,7 +46,8 @@ public class ModifierFlow implements ClassModifier {
 				) {
 			///home/user/Desktop/ColonialObfuscator-master/Untitled-OBF.jar
 			for (int i = 0; i < 1 + new Random().nextInt(5); i++) {
-              method.instructions.insertBefore(insnNode, new LdcInsnNode(NameGen.String(new Random().nextInt(5))));
+              method.instructions.insertBefore(insnNode,
+            		  new LdcInsnNode(NameGen.String(new Random().nextInt(5))));
               method.instructions.insertBefore(insnNode, new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "java/lang/String", "length", "()I", false));
               method.instructions.insertBefore(insnNode, new InsnNode(Opcodes.POP));
 			}
