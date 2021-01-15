@@ -158,7 +158,7 @@ public class OutputUtil {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		StringEncryption.Start();
+		//StringEncryption.Start();
 		try {
 			outputStream = new JarOutputStream(
 						new FileOutputStream(output));
@@ -169,7 +169,7 @@ public class OutputUtil {
 					m.modify(classNode);
 				}
 			});
-			StringEncryption.END();
+		//	StringEncryption.END();
 			classes.putAll(ToAdd);
 			classes.values().forEach(classNode -> {
 				ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS);
@@ -194,7 +194,7 @@ public class OutputUtil {
 			e.printStackTrace();
 		}
 
-		StringEncryption.stringList.clear();
+	//	StringEncryption.stringList.clear();
 		ToAdd.clear(); 
 		classes.clear();
         System.out.println("[Stopped] array size == " + modules().size());

@@ -17,6 +17,7 @@ import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.commons.InstructionAdapter;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.LdcInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
@@ -27,7 +28,7 @@ import colonialobfuscator.utils.BytecodeHelper;
 import colonialobfuscator.utils.NameGen;
 
 public class StringEncryption implements ClassModifier {
-	private static String FIELD_NAME = "string_store";
+	/*private static String FIELD_NAME = "string_store";
 	private static String CALL_NAME = "unscramble";
 	private static final String CALL_DESC = "(IILjava/lang/String;)Ljava/lang/String;";
 	//private static final String XOR_Name = "a";
@@ -48,20 +49,112 @@ public class StringEncryption implements ClassModifier {
 		unscrambleClass.visitField(ACC_PUBLIC | ACC_STATIC, FIELD_NAME, "[Ljava/lang/String;", null, null);
 
 	}
-
+*/
+	private static String XOR(int i, int j, String string, int k, int l) {
+		StringBuilder sb = new StringBuilder();
+		for(char c : string.toCharArray()) {
+			sb.append((char)(((c ^ (i ^ k)) ^ j) ^ l));
+		}
+		return sb.toString();
+	}
 	@Override
 	public void modify(ClassNode node) {
 	try {
 		if(node.methods != null && node.methods.size() > 0) {
-			node.methods.forEach(this::buildStringList);
-			for (MethodNode mn : node.methods) {
-				scramble(mn);
+			
+			String name = NameGen.String(4);
+			for(MethodNode mn : node.methods) {
+				BytecodeHelper.<LdcInsnNode>forEach(mn.instructions, LdcInsnNode.class, ldc -> {
+					if (ldc.cst instanceof String) {
+						int k1 = new Random().nextInt();
+						int k2 = new Random().nextInt();
+						int k3 = new Random().nextInt();
+						int k4 = new Random().nextInt();
+						String s = (String)ldc.cst;
+						InsnList il = new InsnList();
+						il.add(new LdcInsnNode(k1));
+						il.add(new LdcInsnNode(k2));
+						il.add(new LdcInsnNode(XOR(k1, k2, s, k3, k4)));
+						il.add(new LdcInsnNode(k3));
+						il.add(new LdcInsnNode(k4));
+					//	methodVisitor.visitMethodInsn(INVOKESTATIC, "test/TEST", "XOR", "(IILjava/lang/String;II)Ljava/lang/String;", false);
+					//	methodVisitor.visitInsn(POP);
+						il.add(new MethodInsnNode(INVOKESTATIC, node.name, name, "(IILjava/lang/String;II)Ljava/lang/String;", false));
+						mn.instructions.insert(ldc, il);
+						mn.instructions.remove(ldc);
+					}
+				});
 			}
+			
+			
+			MethodVisitor methodVisitor = node.visitMethod(ACC_PRIVATE | ACC_STATIC, name, "(IILjava/lang/String;II)Ljava/lang/String;", null, null);
+			methodVisitor.visitCode();
+			Label label0 = new Label();
+			methodVisitor.visitLabel(label0);
+			methodVisitor.visitTypeInsn(NEW, "java/lang/StringBuilder");
+			methodVisitor.visitInsn(DUP);
+			methodVisitor.visitMethodInsn(INVOKESPECIAL, "java/lang/StringBuilder", "<init>", "()V", false);
+			methodVisitor.visitVarInsn(ASTORE, 5);
+			Label label1 = new Label();
+			methodVisitor.visitLabel(label1);
+			methodVisitor.visitVarInsn(ALOAD, 2);
+			methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/String", "toCharArray", "()[C", false);
+			methodVisitor.visitInsn(DUP);
+			methodVisitor.visitVarInsn(ASTORE, 9);
+			methodVisitor.visitInsn(ARRAYLENGTH);
+			methodVisitor.visitVarInsn(ISTORE, 8);
+			methodVisitor.visitInsn(ICONST_0);
+			methodVisitor.visitVarInsn(ISTORE, 7);
+			Label label2 = new Label();
+			methodVisitor.visitJumpInsn(GOTO, label2);
+			Label label3 = new Label();
+			methodVisitor.visitLabel(label3);
+			methodVisitor.visitFrame(Opcodes.F_FULL, 10, new Object[] {Opcodes.INTEGER, Opcodes.INTEGER, "java/lang/String", Opcodes.INTEGER, Opcodes.INTEGER, "java/lang/StringBuilder", Opcodes.TOP, Opcodes.INTEGER, Opcodes.INTEGER, "[C"}, 0, new Object[] {});
+			methodVisitor.visitVarInsn(ALOAD, 9);
+			methodVisitor.visitVarInsn(ILOAD, 7);
+			methodVisitor.visitInsn(CALOAD);
+			methodVisitor.visitVarInsn(ISTORE, 6);
+			Label label4 = new Label();
+			methodVisitor.visitLabel(label4);
+			methodVisitor.visitVarInsn(ALOAD, 5);
+			methodVisitor.visitVarInsn(ILOAD, 6);
+			methodVisitor.visitVarInsn(ILOAD, 0);
+			methodVisitor.visitVarInsn(ILOAD, 3);
+			methodVisitor.visitInsn(IXOR);
+			methodVisitor.visitInsn(IXOR);
+			methodVisitor.visitVarInsn(ILOAD, 1);
+			methodVisitor.visitInsn(IXOR);
+			methodVisitor.visitVarInsn(ILOAD, 4);
+			methodVisitor.visitInsn(IXOR);
+			methodVisitor.visitInsn(I2C);
+			methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "append", "(C)Ljava/lang/StringBuilder;", false);
+			methodVisitor.visitInsn(POP);
+			Label label5 = new Label();
+			methodVisitor.visitLabel(label5);
+			methodVisitor.visitIincInsn(7, 1);
+			methodVisitor.visitLabel(label2);
+			methodVisitor.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+			methodVisitor.visitVarInsn(ILOAD, 7);
+			methodVisitor.visitVarInsn(ILOAD, 8);
+			methodVisitor.visitJumpInsn(IF_ICMPLT, label3);
+			Label label6 = new Label();
+			methodVisitor.visitLabel(label6);
+			methodVisitor.visitLineNumber(14, label6);
+			methodVisitor.visitVarInsn(ALOAD, 5);
+			methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "toString", "()Ljava/lang/String;", false);
+			methodVisitor.visitInsn(ARETURN);
+			Label label7 = new Label();
+			methodVisitor.visitLabel(label7);
+			methodVisitor.visitMaxs(4, 10);
+			methodVisitor.visitEnd();
+			
+			
 		}
 	} catch (Exception ex) {
 		ex.printStackTrace();
 	}
 	}
+	/*
 	public static void END() {
 		createUnscramble();
 		try {
@@ -262,5 +355,5 @@ public class StringEncryption implements ClassModifier {
 	        methodNode.visitEnd();
 
 	        return methodNode;
-	    }
+	    }*/
 }
