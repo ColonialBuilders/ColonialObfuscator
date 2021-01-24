@@ -107,6 +107,8 @@ public class StringEncryption implements ClassModifier {
 	
 	@Override
 	public void modify(ClassNode node) {
+        if ((node.access & ACC_INTERFACE) != 0)
+            return;
 	try {
 		if(node.methods != null && node.methods.size() > 0) {
 			
