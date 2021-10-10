@@ -126,9 +126,6 @@ public class ObfuscationPanel extends JPanel {
 		gbc_CodeLogicObfuscationCheckBox.gridx = 0;
 		gbc_CodeLogicObfuscationCheckBox.gridy = 8;
 		add(CodeLogicCheckBox, gbc_CodeLogicObfuscationCheckBox);
-
-		//ModifierCodeLogic
-
 	}
 
 }

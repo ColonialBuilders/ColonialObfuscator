@@ -32,11 +32,6 @@ public class ModifierNumbers implements ClassModifier {
                      insnList.add(new LdcInsnNode(value1));
                      insnList.add(new LdcInsnNode(value2));
                      insnList.add(new InsnNode(IXOR));
-                     
-                     
-                     insnList.add(new VarInsnNode(LLOAD,varIndex));
-                     insnList.add(new InsnNode(L2I));
-                     insnList.add(new InsnNode(IXOR));
 
                      mn.instructions.insertBefore(insn, insnList);
                      mn.instructions.remove(insn);
