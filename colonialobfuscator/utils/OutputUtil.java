@@ -9,6 +9,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
+import colonialobfuscator.transforms.*;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
@@ -21,14 +22,6 @@ import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.TypeInsnNode;
 
 import colonialobfuscator.guis.ObfuscationPanel;
-import colonialobfuscator.transforms.ClassModifier;
-import colonialobfuscator.transforms.LocalVariables;
-import colonialobfuscator.transforms.ModifierAccessCode;
-import colonialobfuscator.transforms.ModifierBooleans;
-import colonialobfuscator.transforms.ModifierFlow;
-import colonialobfuscator.transforms.ModifierNumbers;
-import colonialobfuscator.transforms.ModifierOptimizeCheck;
-import colonialobfuscator.transforms.StringEncryption;
 
 public class OutputUtil {
 	private static JarOutputStream outputStream = null;
@@ -56,6 +49,9 @@ public class OutputUtil {
 		}
 		if(ObfuscationPanel.BooleansCheckBox.isSelected()) {
 			modifier.add(new ModifierBooleans());
+		}
+		if(ObfuscationPanel.CodeLogicCheckBox.isSelected()) {
+			modifier.add(new ModifierCodeLogic());
 		}
 		if(ObfuscationPanel.localvariablesCheckBox.isSelected()) {
 			modifier.add(new LocalVariables());

@@ -27,7 +27,8 @@ public class ObfuscationPanel extends JPanel {
 	public static JCheckBox localvariablesCheckBox;
 	public static JCheckBox FakeDirectoriesCheckBox;
 	public static JCheckBox NumberObfuscationCheckBox;
-	
+	public static JCheckBox CodeLogicCheckBox;
+
 	/**
 	 * Create the panel.
 	 */
@@ -111,13 +112,22 @@ public class ObfuscationPanel extends JPanel {
 		add(FakeDirectoriesCheckBox, gbc_FakeDirectoriesCheckBox);
 		
 		NumberObfuscationCheckBox = new JCheckBox("NumberObfuscation");
-		FakeDirectoriesCheckBox.setBackground(Color.WHITE);
+		NumberObfuscationCheckBox.setBackground(Color.WHITE);
 		GridBagConstraints gbc_NumberObfuscationCheckBox = new GridBagConstraints();
 		gbc_NumberObfuscationCheckBox.anchor = GridBagConstraints.WEST;
 		gbc_NumberObfuscationCheckBox.gridx = 0;
 		gbc_NumberObfuscationCheckBox.gridy = 7;
 		add(NumberObfuscationCheckBox, gbc_NumberObfuscationCheckBox);
-		
+
+		CodeLogicCheckBox = new JCheckBox("CodeLogicScrambler");
+		CodeLogicCheckBox.setBackground(Color.WHITE);
+		GridBagConstraints gbc_CodeLogicObfuscationCheckBox = new GridBagConstraints();
+		gbc_CodeLogicObfuscationCheckBox.anchor = GridBagConstraints.WEST;
+		gbc_CodeLogicObfuscationCheckBox.gridx = 0;
+		gbc_CodeLogicObfuscationCheckBox.gridy = 8;
+		add(CodeLogicCheckBox, gbc_CodeLogicObfuscationCheckBox);
+
+		//ModifierCodeLogic
 
 	}
 
