@@ -50,7 +50,7 @@ public class FilePanel extends JPanel {
 		gbc_inputField.gridy = 0;
 		add(inputField, gbc_inputField);
 		inputField.setColumns(10);
-		
+
 		JButton inputButton = new JButton("Select");
 		inputButton.addActionListener((e) -> {
             JFileChooser chooser = new JFileChooser();
@@ -92,7 +92,7 @@ public class FilePanel extends JPanel {
 		gbc_outputField.gridy = 1;
 		add(outputField, gbc_outputField);
 		outputField.setColumns(10);
-		
+
 		JButton outputButton = new JButton("Select");
 		outputButton.addActionListener((e) -> {
             JFileChooser chooser = new JFileChooser();
