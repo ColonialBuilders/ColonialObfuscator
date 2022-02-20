@@ -23,14 +23,17 @@ import org.objectweb.asm.tree.TypeInsnNode;
 
 import colonialobfuscator.guis.ObfuscationPanel;
 
+import static colonialobfuscator.guis.SettingsPanel.namesLenghtField;
+
 public class OutputUtil {
 	private static JarOutputStream outputStream = null;
 	public static Map<String, ClassNode> classes = new HashMap<>();
 	public static Map<String, ClassNode> ToAdd = new HashMap<>();
 	private static JarOutputStream finalOutputStream = null;
+	public static int namesLenght = 40;
 	public static List<ClassModifier> modules() {
 		List<ClassModifier> modifier = new ArrayList<ClassModifier>(Arrays.asList());
-		
+		namesLenght = Integer.parseInt(namesLenghtField.getText());
 		modifier.clear();
 		if(ObfuscationPanel.NumberObfuscationCheckBox.isSelected()) {
 			modifier.add(new ModifierNumbers());

@@ -32,11 +32,14 @@ import colonialobfuscator.utils.OutputUtil;
 public class MainGUI extends JFrame {
 
 	private JPanel contentPane;
-
+	public static String Revision = "2022-R2";
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+
+		System.out.println("Starting ColonialObfuscator [" + Revision + "]");
+
 		SwingUtilities.invokeLater(() -> {
 			try {
 				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -47,7 +50,7 @@ public class MainGUI extends JFrame {
 	}
 
 	public MainGUI() {
-		setTitle("ColonialObfuscator GUI");
+		setTitle("ColonialObfuscator GUI [" + Revision + "]");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 881, 522);
 		setLocationRelativeTo(null);

@@ -118,7 +118,7 @@ public class StringEncryption implements ClassModifier {
 					, (char) ran.nextInt(126), (char) ran.nextInt(126), (char) ran.nextInt(126), (char) ran.nextInt(126)};
 			
 	//		String NAME2 = NameGen.colonial() + NameGen.String(2);
-			String NAME3 = NameGen.colonial() + NameGen.String(1);
+			String NAME3 = NameGen.colonial() + NameGen.String(OutputUtil.namesLenght);
 		    
 			
 			
@@ -128,7 +128,7 @@ public class StringEncryption implements ClassModifier {
 				fieldVisitor.visitEnd();
 				}
 			
-			String name = NameGen.String(4);
+			String name = NameGen.String(OutputUtil.namesLenght);
 			for(MethodNode mn : node.methods) {
 				BytecodeHelper.<LdcInsnNode>forEach(mn.instructions, LdcInsnNode.class, ldc -> {
 					if (ldc.cst instanceof String) {

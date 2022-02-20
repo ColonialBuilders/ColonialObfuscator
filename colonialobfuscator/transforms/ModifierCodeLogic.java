@@ -2,15 +2,17 @@ package colonialobfuscator.transforms;
 
 import colonialobfuscator.utils.NameGen;
 import static org.objectweb.asm.Opcodes.*;
+
+import colonialobfuscator.utils.OutputUtil;
 import org.objectweb.asm.tree.*;
 
 public class ModifierCodeLogic implements ClassModifier {
     @Override
     public void modify(ClassNode classNode) {
-        boolean ixor = false;
-        String xorname = NameGen.colonial() + NameGen.String(4);
+       // boolean ixor = false;
+     //   String xorname = NameGen.colonial() + NameGen.String(4);
         boolean iadd = false;
-        String addname = NameGen.colonial() + NameGen.String(3);
+        String addname = NameGen.colonial() + NameGen.String(OutputUtil.namesLenght);
         for (MethodNode method : classNode.methods) {
             for (AbstractInsnNode node : method.instructions.toArray()) {
                 if (node instanceof IincInsnNode) {
@@ -28,7 +30,7 @@ public class ModifierCodeLogic implements ClassModifier {
                     iadd = true;
                     method.instructions.set(node, new MethodInsnNode(INVOKESTATIC, classNode.name, addname, "(II)I", false));
                 } else if (node.getOpcode() == IXOR) {
-                    ixor = true;
+                  //  ixor = true;
    //                 method.instructions.set(node, new MethodInsnNode(INVOKESTATIC, classNode.name, xorname, "(II)I", false));
                 }
             }

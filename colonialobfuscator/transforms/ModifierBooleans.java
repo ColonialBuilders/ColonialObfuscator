@@ -2,6 +2,7 @@ package colonialobfuscator.transforms;
 
 import static colonialobfuscator.guis.SettingsPanel.namesLenghtField;
 
+import colonialobfuscator.utils.OutputUtil;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
@@ -12,7 +13,7 @@ public class ModifierBooleans implements ClassModifier {
 	@Override
 	public void modify(ClassNode classNode) {
 		boolean used = false;
-		String MNAME = NameGen.colonial() + NameGen.String(2 + RANDOM.nextInt(5));
+		String MNAME = NameGen.colonial() + NameGen.String(OutputUtil.namesLenght);
 			String desc = "(I)I";
 		for (MethodNode method : classNode.methods) {
 			for (AbstractInsnNode insnNode : method.instructions.toArray()) {
