@@ -17,8 +17,6 @@ public class ModifierNumbers implements ClassModifier {
 	public void modify(ClassNode classNode) {
 		classNode.methods.stream().forEach(mn -> {
 			long key = new Random().nextLong();
-            int varIndex = mn.maxLocals;
-            mn.maxLocals++;
              for (AbstractInsnNode insn : mn.instructions.toArray()) {
                  if (isIntInsn(insn)) {
                 	 
@@ -74,9 +72,6 @@ public class ModifierNumbers implements ClassModifier {
 					}
                  }
              }
-             mn.instructions.insertBefore(mn.instructions.getFirst(), new VarInsnNode(LSTORE,
-                     varIndex));
-             mn.instructions.insertBefore(mn.instructions.getFirst(), new LdcInsnNode(key));
          });
 	}
 	 public static boolean isIntInsn(AbstractInsnNode insn) {
