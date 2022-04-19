@@ -4,6 +4,7 @@ import colonialobfuscator.utils.NameGen;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
 
+import java.util.Arrays;
 import java.util.Random;
 
 public class ModifierFlow implements ClassModifier {
@@ -25,6 +26,10 @@ public class ModifierFlow implements ClassModifier {
 							method.instructions.insertBefore(insnNode,
 									new LdcInsnNode(NameGen.String(new Random().nextInt(5))));
 							method.instructions.insertBefore(insnNode, new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "java/lang/String", "length", "()I", false));
+								method.instructions.insertBefore(insnNode,
+										new LdcInsnNode(NameGen.String(new Random().nextInt(5))));
+								method.instructions.insertBefore(insnNode, new InsnNode(Opcodes.POP));
+
 							if (RANDOM.nextBoolean()) {
 								method.instructions.insertBefore(insnNode, new InsnNode(Opcodes.DUP));
 			//					for (int i2 = 0; i2 < 2 + random.nextInt(5); i2++) {

@@ -32,7 +32,7 @@ import colonialobfuscator.utils.OutputUtil;
 public class MainGUI extends JFrame {
 
 	private JPanel contentPane;
-	public static String Revision = "2022-R2";
+	public static String Revision = "2022-R3";
 	/**
 	 * Launch the application.
 	 */
